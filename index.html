@@ -663,6 +663,15 @@
       margin-bottom: 15px;
       color: var(--primary);
     }
+    
+    .products-count {
+      text-align: center;
+      margin: 20px 0;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 18px;
+      grid-column: 1 / -1;
+    }
   </style>
   <link rel="sitemap" type="application/xml" href="sitemap.xml">
 </head>
@@ -685,7 +694,7 @@
   "@context": "https://schema.org",
   "@type": "Store",
   "name": "هوديكسو",
-  "description": "تسوق 46+ تي شيرت ألعاب مضحكة مع شعار 'أوقفت لعبتي لأكون هنا' الشهير",
+  "description": "تسوق تي شيرت ألعاب مضحكة مع شعار 'أوقفت لعبتي لأكون هنا' الشهير",
   "url": "https://hoodexo.github.io/shirt/",
   "telephone": "+1-555-123-4567",
   "email": "support@gamertees.com",
@@ -762,6 +771,10 @@
       <h2>التي شيرتات المميزة</h2>
       <p>اكتشف مجموعتنا من تي شيرتات الألعاب المميزة مع الشعار الشهير "أوقفت لعبتي لأكون هنا"</p>
     </div>
+    
+    <!-- عرض عدد المنتجات -->
+    <div id="products-count" class="products-count" style="display: none;"></div>
+    
     <div class="products" id="products-container">
       <!-- سيتم ملء المنتجات ديناميكياً من ملف JSON -->
       <div class="loading">
@@ -769,8 +782,10 @@
         <p>جاري تحميل المنتجات...</p>
       </div>
     </div>
-    <div style="text-align: center; margin-top: 40px;">
-      <a href="#" class="btn btn-secondary">عرض جميع المنتجات</a>
+    
+    <!-- زر عرض المزيد (يظهر إذا كان هناك أكثر من 12 منتج) -->
+    <div id="load-more-container" style="text-align: center; margin-top: 40px; display: none;">
+      <button id="load-more-btn" class="btn btn-secondary">عرض المزيد من المنتجات</button>
     </div>
   </section>
 
@@ -874,48 +889,99 @@
   </footer>
 
   <script>
-    // بيانات التصنيفات الثابتة (يمكن جلبها من ملف JSON منفصل)
-    const categories = [
-      { id: "all", name: "جميع المنتجات" },
-      { id: "streetwear", name: "ستريت وير" },
-      { id: "gaming", name: "الألعاب" },
-      { id: "memes", name: "الميمز" },
-      { id: "horror", name: "الرعب" },
-      { id: "fortnite", name: "فورتنايت" },
-      { id: "july-niche", name: "نيش يوليو" },
-      { id: "brand-on-demand", name: "براند حسب الطلب" }
-    ];
+    // بيانات التصنيفات - سيتم توليدها تلقائياً من المنتجات
+    let categories = [];
 
     document.addEventListener('DOMContentLoaded', function() {
-      // تهيئة التصنيفات
-      initCategories();
-      
-      // جلب البيانات من ملف JSON
+      // جلب البيانات من ملف JSON وعرض المنتجات
       loadProductsFromJSON();
       
       // وظائف البحث
       initSearch();
     });
 
+    async function loadProductsFromJSON() {
+      try {
+        // جلب البيانات من ملف JSON
+        const response = await fetch('products.json');
+        const data = await response.json();
+        
+        // عرض عدد المنتجات
+        updateProductsCount(data.products.length);
+        
+        // توليد التصنيفات من المنتجات
+        generateCategoriesFromProducts(data.products);
+        
+        // تهيئة التصنيفات
+        initCategories();
+        
+        // عرض المنتجات
+        displayProducts(data.products);
+        
+      } catch (error) {
+        console.error('خطأ في تحميل المنتجات:', error);
+        showErrorLoadingProducts();
+      }
+    }
+
+    function generateCategoriesFromProducts(products) {
+      // استخراج التصنيفات الفريدة من المنتجات
+      const uniqueCategories = [...new Set(products.map(product => product.category))];
+      
+      // إنشاء قائمة التصنيفات
+      categories = [
+        { id: "all", name: "جميع المنتجات" }
+      ];
+      
+      // إضافة التصنيفات الفريدة
+      uniqueCategories.forEach(category => {
+        categories.push({
+          id: category,
+          name: translateCategory(category)
+        });
+      });
+    }
+
+    function translateCategory(category) {
+      const translations = {
+        "gaming": "الألعاب",
+        "memes": "الميمز",
+        "streetwear": "ستريت وير",
+        "horror": "الرعب",
+        "fortnite": "فورتنايت",
+        "sports": "الرياضة",
+        "anime": "أنمي",
+        "music": "الموسيقى",
+        "funny": "مضحك",
+        "vintage": "قديم",
+        "custom": "مخصص"
+      };
+      
+      return translations[category] || category;
+    }
+
     function initCategories() {
       const categoriesFilter = document.getElementById('categories-filter');
+      categoriesFilter.innerHTML = '';
       
-      // إضافة زر الكل أولاً
-      const allBtn = document.createElement('button');
-      allBtn.className = 'category-btn active';
-      allBtn.setAttribute('data-category', 'all');
-      allBtn.textContent = 'جميع المنتجات';
-      allBtn.addEventListener('click', function() {
-        setActiveCategory('all');
-      });
-      categoriesFilter.appendChild(allBtn);
-      
-      // إضافة باقي التصنيفات
-      categories.filter(cat => cat.id !== 'all').forEach(category => {
+      // إضافة جميع التصنيفات
+      categories.forEach(category => {
         const categoryBtn = document.createElement('button');
-        categoryBtn.className = 'category-btn';
+        categoryBtn.className = category.id === 'all' ? 'category-btn active' : 'category-btn';
         categoryBtn.setAttribute('data-category', category.id);
         categoryBtn.textContent = category.name;
+        
+        // حساب عدد المنتجات في هذا التصنيف
+        const productCount = category.id === 'all' 
+          ? document.querySelectorAll('.product').length 
+          : document.querySelectorAll(`.product[data-category="${category.id}"]`).length;
+        
+        if (productCount > 0) {
+          const badge = document.createElement('span');
+          badge.className = 'category-badge';
+          badge.textContent = productCount;
+          categoryBtn.appendChild(badge);
+        }
         
         categoryBtn.addEventListener('click', function() {
           setActiveCategory(category.id);
@@ -938,49 +1004,10 @@
       filterProductsByCategory(categoryId);
     }
 
-    async function loadProductsFromJSON() {
-      try {
-        // جلب البيانات من ملف JSON
-        const response = await fetch('products.json');
-        const data = await response.json();
-        
-        // عرض المنتجات
-        displayProducts(data.products);
-      } catch (error) {
-        console.error('Error loading products:', error);
-        // في حالة الخطأ، استخدم بيانات تجريبية
-        const sampleProducts = [
-          {
-            id: "TSHIRT-001",
-            title: "تي شيرت أوقفت لعبتي لأكون هنا - التصميم 1",
-            description: "مصنوع من 100% قطن مسبق الانكماش مع خياطة متينة، رقبة ملصقة، ياقة بدون درزات، وحواف مزدوجة الإبرة.",
-            price: "19.99",
-            image: "images/tshirt45.jpg",
-            category: "gaming",
-            reviews: {
-              rating: 4.8,
-              count: 42
-            },
-            inStock: true,
-            sku: "PMG001"
-          },
-          {
-            id: "TSHIRT-002", 
-            title: "تي شيرت أوقفت لعبتي لأكون هنا - التصميم 2",
-            description: "تي شيرت ممتاز 100% قطن مع اقتباس ألعاب مضحك. مثالي للاعبين الذين يريدون إظهار شغفهم.",
-            price: "19.99",
-            image: "images/tshirt43.jpg",
-            category: "memes",
-            reviews: {
-              rating: 4.5,
-              count: 28
-            },
-            inStock: true,
-            sku: "PMG002"
-          }
-        ];
-        displayProducts(sampleProducts);
-      }
+    function updateProductsCount(count) {
+      const countElement = document.getElementById('products-count');
+      countElement.textContent = `عرض ${count} منتج${count !== 1 ? '' : ''}`;
+      countElement.style.display = 'block';
     }
 
     function displayProducts(products) {
@@ -1010,7 +1037,7 @@
             "name": product.title,
             "description": product.description,
             "image": product.image.startsWith('http') ? product.image : `https://hoodexo.github.io/shirt/${product.image}`,
-            "sku": product.sku || product.id,
+            "sku": product.id,
             "offers": {
               "@type": "Offer",
               "price": product.price,
@@ -1020,21 +1047,17 @@
             },
             "brand": {
               "@type": "Brand",
-              "name": "تي شيرتات الألعاب"
-            },
-            "aggregateRating": product.reviews ? {
-              "@type": "AggregateRating",
-              "ratingValue": product.reviews.rating,
-              "reviewCount": product.reviews.count,
-              "bestRating": "5",
-              "worstRating": "1"
-            } : undefined
+              "name": "هوديكسو"
+            }
           }
         });
       });
       
       // إضافة البيانات المنظمة للصفحة
       addStructuredData(productStructuredData);
+      
+      // تحديث التصنيفات بعد عرض المنتجات
+      initCategories();
     }
 
     function addStructuredData(data) {
@@ -1061,44 +1084,49 @@
       const productDiv = document.createElement('div');
       productDiv.className = 'product';
       productDiv.setAttribute('data-category', product.category);
-      productDiv.setAttribute('data-sku', product.sku || product.id);
+      productDiv.setAttribute('data-id', product.id);
       
       // استخدام أول 80 حرف من الوصف كوصف مختصر
       const shortDescription = product.description.length > 80 ? 
         product.description.substring(0, 80) + '...' : product.description;
       
       // إنشاء الرابط الصحيح بناءً على الـ ID
-      const productLink = `https://hoodexo.github.io/shirt/product-${product.id}.html`;
+      const productLink = `product-${product.id}.html`;
       
       // إنشاء صورة آمنة مع رابط كامل
       const imageUrl = product.image.startsWith('http') ? 
-        product.image : `https://hoodexo.github.io/shirt/${product.image}`;
+        product.image : product.image;
+      
+      // تحديد حالة المخزون
+      const stockStatus = product.inStock === true ? "متوفر" : product.inStock === false ? "غير متوفر" : "تحقق من التوفر";
+      const stockClass = product.inStock === true ? "in-stock" : product.inStock === false ? "out-of-stock" : "check-availability";
       
       productDiv.innerHTML = `
+        ${product.inStock === false ? `<div class="product-badge ${stockClass}">${stockStatus}</div>` : ''}
         <div class="product-img">
-          <img src="${imageUrl}" alt="${product.title}" 
+          <img src="${imageUrl}" alt="${product.imageAlt || product.title}" 
                onerror="this.src='https://via.placeholder.com/300x300/6a5af9/ffffff?text=تي+شيرت+ألعاب'"
                loading="lazy">
         </div>
         <div class="product-info">
           <h3>${product.title}</h3>
           <p>${shortDescription}</p>
-          ${product.reviews ? `
-          <div style="display: flex; align-items: center; gap: 5px; margin: 10px 0; color: #ffc107;">
-            <i class="fas fa-star"></i>
-            <span style="font-weight: 600;">${product.reviews.rating}</span>
-            <span style="color: var(--gray); font-size: 14px;">(${product.reviews.count})</span>
-          </div>
-          ` : ''}
           <div class="product-price">
             <span class="price">$${product.price}</span>
             <div class="product-actions">
-              <button class="icon-btn" aria-label="أضف للمفضلة"><i class="fas fa-heart"></i></button>
-              <a href="${productLink}" class="btn">عرض</a>
+              <button class="icon-btn" aria-label="أضف للمفضلة" onclick="event.stopPropagation(); addToFavorites('${product.id}')">
+                <i class="fas fa-heart"></i>
+              </button>
+              <a href="${productLink}" class="btn">عرض التفاصيل</a>
             </div>
           </div>
         </div>
       `;
+      
+      // إضافة حدث النقر على المنتج
+      productDiv.addEventListener('click', function() {
+        window.location.href = productLink;
+      });
       
       return productDiv;
     }
@@ -1117,24 +1145,38 @@
       });
       
       // تحديث عدد المنتجات المعروضة
-      updateProductCount(visibleCount, categoryId);
+      updateVisibleProductsCount(visibleCount, categoryId);
     }
 
-    function updateProductCount(count, categoryId) {
-      // إزالة أي عداد موجود مسبقاً
-      const existingCounter = document.querySelector('.products-count');
-      if (existingCounter) {
-        existingCounter.remove();
-      }
-      
-      if (categoryId !== 'all') {
-        const categoryName = categories.find(cat => cat.id === categoryId)?.name || categoryId;
-        const counter = document.createElement('div');
-        counter.className = 'search-results-count products-count';
-        counter.textContent = `عرض ${count} منتج${count !== 1 ? '' : ''} في ${categoryName}`;
-        
-        const productsContainer = document.getElementById('products-container');
-        productsContainer.parentNode.insertBefore(counter, productsContainer);
+    function updateVisibleProductsCount(count, categoryId) {
+      const categoryName = categories.find(cat => cat.id === categoryId)?.name || categoryId;
+      const countElement = document.getElementById('products-count');
+      countElement.textContent = `عرض ${count} منتج${count !== 1 ? '' : ''} ${categoryId !== 'all' ? `في ${categoryName}` : ''}`;
+    }
+
+    function showErrorLoadingProducts() {
+      const productsContainer = document.getElementById('products-container');
+      productsContainer.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 50px;">
+          <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff6b6b; margin-bottom: 20px;"></i>
+          <h3 style="color: var(--dark); margin-bottom: 15px;">حدث خطأ في تحميل المنتجات</h3>
+          <p style="color: var(--gray); margin-bottom: 20px;">تعذر تحميل المنتجات من قاعدة البيانات. الرجاء المحاولة مرة أخرى لاحقاً.</p>
+          <button onclick="loadProductsFromJSON()" class="btn btn-secondary">
+            <i class="fas fa-redo"></i> إعادة المحاولة
+          </button>
+        </div>
+      `;
+    }
+
+    function addToFavorites(productId) {
+      // حفظ المنتج في المفضلة (يمكن استخدام localStorage)
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      if (!favorites.includes(productId)) {
+        favorites.push(productId);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('تمت إضافة المنتج إلى المفضلة!');
+      } else {
+        alert('المنتج موجود بالفعل في المفضلة!');
       }
     }
 
@@ -1144,15 +1186,11 @@
       const searchInput    = document.getElementById('search-input');
       const searchBtn      = document.getElementById('search-btn');
 
-      // إضافة بيانات المخطط للبحث
-      addSearchStructuredData();
-
       searchToggle.addEventListener('click', function(e) {
         e.stopPropagation();
         searchBox.classList.toggle('active');
         if (searchBox.classList.contains('active')) {
           searchInput.focus();
-          // إضافة تأثير للبحث عند الفتح
           searchBox.style.animation = 'slideDown 0.3s ease';
         }
       });
@@ -1241,9 +1279,6 @@
       }
       
       function showResultsCount(count, term) {
-        const existingMsg = document.querySelector('.search-results-count:not(.products-count)');
-        if (existingMsg) existingMsg.remove();
-        
         const productsContainer = document.getElementById('products-container');
         const div = document.createElement('div');
         div.className = 'search-results-count';
@@ -1262,25 +1297,6 @@
           <button onclick="clearSearch()" class="btn" style="margin-top:15px;">عرض جميع المنتجات</button>
         `;
         productsContainer.parentNode.insertBefore(div, productsContainer.nextSibling);
-      }
-      
-      function addSearchStructuredData() {
-        const searchData = {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": "تي شيرتات الألعاب",
-          "url": "https://hoodexo.github.io/shirt/",
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://hoodexo.github.io/shirt/?search={search_term_string}",
-            "query-input": "required name=search_term_string"
-          }
-        };
-        
-        const script = document.createElement('script');
-        script.type = 'application/ld+json';
-        script.textContent = JSON.stringify(searchData);
-        document.head.appendChild(script);
       }
       
       window.clearSearch = function() {
