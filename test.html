@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>نموذج الطلب</title>
+<style>
+  body { font-family: sans-serif; background: #f6f6f6; padding: 20px; }
+  form { background: #fff; padding: 20px; border-radius: 10px; max-width: 450px; margin: auto; }
+  label { display: block; margin-bottom: 5px; }
+  input, select { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; }
+  button { background: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; }
+  button:hover { background: #218838; }
+  .success { color: green; margin-top: 10px; }
+</style>
+</head>
+
+<body>
+<h2 style="text-align:center">نموذج الطلب</h2>
+
+<form id="orderForm">
+  <label>الاسم</label>
+  <input type="text" id="name" required>
+
+  <label>رقم الهاتف</label>
+  <input type="text" id="phone" required>
+
+  <label>الولاية</label>
+  <select id="state" required></select>
+
+  <label>البلدية</label>
+  <select id="city" required></select>
+
+  <label>عدد الطلبات</label>
+  <input type="number" id="quantity" min="1" value="1" required>
+
+  <button type="submit">إرسال الطلب</button>
+
+  <p class="success" id="successMsg" style="display:none;">تم إرسال الطلب بنجاح ✔</p>
+</form>
+
+<script>
+// قائمة الولايات والبلديات الجزائرية
+const DZ = {
+  "الجزائر": ["درارية", "بئر خادم", "براقي", "القبة"],
+  "وهران": ["السانية", "قديل", "بئر الجير"],
+  "سطيف": ["العلمة", "عين ولمان", "عين أرنات"],
+  "قسنطينة": ["الخروب", "عين السمارة"],
+};
+
+// ملء قائمة الولايات
+const stateSelect = document.getElementById("state");
+const citySelect = document.getElementById("city");
+
+Object.keys(DZ).forEach(state => {
+  let opt = document.createElement("option");
+  opt.value = opt.innerText = state;
+  stateSelect.appendChild(opt);
+});
+
+// عند تغيير الولاية
+stateSelect.onchange = function() {
+  citySelect.innerHTML = "";
+  DZ[this.value].forEach(city => {
+    let opt = document.createElement("option");
+    opt.value = opt.innerText = city;
+    citySelect.appendChild(opt);
+  });
+};
+
+// API URL من Google Apps Script
+const API_URL = "PASTE_YOUR_SCRIPT_URL_HERE";
+
+document.getElementById("orderForm").onsubmit = async function(e) {
+  e.preventDefault();
+
+  let data = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    state: document.getElementById("state").value,
+    city: document.getElementById("city").value,
+    quantity: document.getElementById("quantity").value
+  };
+
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+  if (res.ok) {
+    document.getElementById("successMsg").style.display = "block";
+    document.getElementById("orderForm").reset();
+  }
+};
+</script>
+
+</body>
+</html>
