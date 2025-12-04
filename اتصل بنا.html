@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اتصل بنا | Pack Dz - كل أنواع المنتجات في مكان واحد</title>
+  <meta name="description" content="تواصل مع Pack Dz للاستفسارات والأسئلة والمساعدة. فريقنا جاهز لخدمتك وتطوير تجربتك الشرائية مع Packs المخصصة.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #6a5af9;
+      --primary-dark: #5a4af4;
+      --secondary: #ff6b6b;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light);
+      color: #333;
+      line-height: 1.6;
+      text-align: right;
+      direction: rtl;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--dark);
+    }
+    
+    .logo-icon {
+      color: var(--primary);
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+    
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    nav a:hover {
+      color: var(--primary);
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      right: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary);
+      transition: var(--transition);
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    .nav-icons {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .nav-icons i {
+      font-size: 18px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .nav-icons i:hover {
+      color: var(--primary);
+    }
+    
+    .breadcrumb {
+      padding: 15px 0;
+      font-size: 14px;
+      color: var(--gray);
+    }
+    
+    .breadcrumb a {
+      color: var(--gray);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .breadcrumb a:hover {
+      color: var(--primary);
+    }
+    
+    .breadcrumb span {
+      margin: 0 8px;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin: 40px 0;
+      color: var(--dark);
+      position: relative;
+    }
+    
+    .page-title h1 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+    
+    .page-title p {
+      color: var(--gray);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .page-title h1::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      right: 50%;
+      transform: translateX(50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+    
+    .contact-section {
+      padding: 40px 0 80px;
+    }
+    
+    .contact-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      margin-top: 40px;
+    }
+    
+    @media (max-width: 992px) {
+      .contact-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .contact-info {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    .contact-info h2 {
+      color: var(--dark);
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--light-gray);
+    }
+    
+    .contact-method {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+      gap: 15px;
+    }
+    
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    
+    .contact-details h3 {
+      color: var(--dark);
+      margin-bottom: 5px;
+    }
+    
+    .contact-details p {
+      color: var(--gray);
+    }
+    
+    .contact-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-block;
+      margin-top: 5px;
+    }
+    
+    .contact-link:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+    
+    .social-links {
+      margin-top: 40px;
+    }
+    
+    .social-links h3 {
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .social-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--light-gray);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dark);
+      font-size: 18px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    
+    .social-icon:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .contact-form {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    .contact-form h2 {
+      color: var(--dark);
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--light-gray);
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--light-gray);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 16px;
+      transition: var(--transition);
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.1);
+    }
+    
+    .btn {
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(106, 90, 249, 0.4);
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(106, 90, 249, 0.6);
+    }
+    
+    .business-hours {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid var(--light-gray);
+    }
+    
+    .business-hours h3 {
+      margin-bottom: 20px;
+      color: var(--dark);
+    }
+    
+    .hours-list {
+      list-style: none;
+    }
+    
+    .hours-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .hours-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .hours-list .day {
+      font-weight: 500;
+    }
+    
+    .hours-list .time {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 60px 0 20px;
+      text-align: right;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-column h3 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--primary);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+    
+    .footer-links a {
+      color: #b0b0b0;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+      padding-right: 5px;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #b0b0b0;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .page-title h1 {
+        font-size: 28px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .contact-info,
+      .contact-form {
+        padding: 25px;
+      }
+    }
+    
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      text-align: center;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .map-container {
+      margin-top: 40px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .map-container iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-cubes"></i>
+        </div>
+        <span>Pack Dz</span>
+      </div>
+      
+      <nav>
+        <ul>
+          <li><a href="index.html">الرئيسية</a></li>
+          <li><a href="index.html#products">المتجر</a></li>
+          <li><a href="faq.html">الأسئلة الشائعة</a></li>
+          <li><a href="contact.html" class="active">اتصل بنا</a></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-icons">
+        <i class="fas fa-search"></i>
+        <i class="fas fa-shopping-cart"></i>
+        <i class="fas fa-user"></i>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="index.html">الرئيسية</a> <span>/</span>
+      <span>اتصل بنا</span>
+    </div>
+  </div>
+
+  <section class="page-title">
+    <div class="container">
+      <h1>تواصل معنا</h1>
+      <p>نحن هنا للإجابة على استفساراتك ومساعدتك في تطوير تجربتك الشرائية مع Packs المخصصة</p>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-container">
+        <div class="contact-info">
+          <h2>معلومات التواصل</h2>
+          
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="contact-details">
+              <h3>الهاتف</h3>
+              <p>متاح من السبت إلى الخميس</p>
+              <a href="tel:+213555123456" class="contact-link">+213 555 123 456</a>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-details">
+              <h3>البريد الإلكتروني</h3>
+              <p>رد سريع خلال 24 ساعة</p>
+              <a href="mailto:support@packdz.com" class="contact-link">support@packdz.com</a>
+            </div>
+          </div>
+          
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-details">
+              <h3>العنوان</h3>
+              <p>الجزائر العاصمة، الجزائر</p>
+              <p>شارع الرئيس هواري بومدين، رقم 123</p>
+            </div>
+          </div>
+          
+          <div class="social-links">
+            <h3>تابعنا على وسائل التواصل</h3>
+            <div class="social-icons">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-whatsapp"></i>
+              </a>
+            </div>
+          </div>
+          
+          <div class="business-hours">
+            <h3>ساعات العمل</h3>
+            <ul class="hours-list">
+              <li>
+                <span class="day">السبت - الأربعاء</span>
+                <span class="time">8:00 ص - 8:00 م</span>
+              </li>
+              <li>
+                <span class="day">الخميس</span>
+                <span class="time">8:00 ص - 5:00 م</span>
+              </li>
+              <li>
+                <span class="day">الجمعة</span>
+                <span class="time">مغلق</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="contact-form">
+          <h2>أرسل رسالة</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">الاسم الكامل *</label>
+              <input type="text" id="name" name="name" required placeholder="أدخل اسمك الكامل">
+            </div>
+            
+            <div class="form-group">
+              <label for="email">البريد الإلكتروني *</label>
+              <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">رقم الهاتف</label>
+              <input type="tel" id="phone" name="phone" placeholder="مثال: 0550123456">
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">الموضوع *</label>
+              <select id="subject" name="subject" required>
+                <option value="">اختر موضوع الرسالة</option>
+                <option value="order">استفسار عن طلب</option>
+                <option value="product">استفسار عن منتج</option>
+                <option value="shipping">استفسار عن الشحن</option>
+                <option value="return">استفسار عن الإرجاع</option>
+                <option value="other">موضوع آخر</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">الرسالة *</label>
+              <textarea id="message" name="message" required rows="5" placeholder="اكتب رسالتك هنا..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-paper-plane"></i> إرسال الرسالة
+            </button>
+          </form>
+          
+          <div id="successMessage" class="success-message">
+            <i class="fas fa-check-circle"></i> تم إرسال رسالتك بنجاح! سنقوم بالرد عليك في أقرب وقت ممكن.
+          </div>
+        </div>
+      </div>
+      
+      <div class="map-container">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.683500444359!2d3.058000215479961!3d36.77450767996212!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb3a3b6f2cb41%3A0xf3cce6c6c7f1c1e0!2sAlgiers%2C%20Algeria!5e0!3m2!1sen!2sdz!4v1625060000000!5m2!1sen!2sdz" 
+          allowfullscreen="" 
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>Pack Dz</h3>
+          <p>وجهتك للحصول على أفضل الـ Packs المتنوعة بأسعار مناسبة وجودة عالية. طوّر أسلوبك الشرائي مع باقاتنا المختارة بعناية لتلائم كل احتياجاتك اليومية.</p>
+        </div>
+        
+        <div class="footer-column">
+          <h3>المتجر</h3>
+          <ul class="footer-links">
+            <li><a href="index.html#products">جميع المنتجات</a></li>
+            <li><a href="#">وصل حديثاً</a></li>
+            <li><a href="#">الأكثر مبيعاً</a></li>
+            <li><a href="#">التخفيضات</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>الدعم</h3>
+          <ul class="footer-links">
+            <li><a href="contact.html">اتصل بنا</a></li>
+            <li><a href="#">سياسة الشحن</a></li>
+            <li><a href="faq.html">الأسئلة الشائعة</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>الاتصال</h3>
+          <ul class="footer-links">
+            <li><a href="mailto:support@packdz.com">support@packdz.com</a></li>
+            <li><a href="tel:+213555123456">+213 555 123 456</a></li>
+            <li><a href="#">الجزائر العاصمة، الجزائر</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2025 Pack Dz. جميع الحقوق محفوظة. | شحن لجميع أنحاء الجزائر</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const contactForm = document.getElementById('contactForm');
+      const successMessage = document.getElementById('successMessage');
+      
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // جمع بيانات النموذج
+        const formData = {
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          phone: document.getElementById('phone').value || 'غير محدد',
+          subject: document.getElementById('subject').value,
+          message: document.getElementById('message').value,
+          timestamp: new Date().toISOString()
+        };
+        
+        // هنا يمكنك إضافة كود لإرسال البيانات إلى الخادم
+        // على سبيل المثال: saveContactForm(formData);
+        
+        // إظهار رسالة النجاح
+        successMessage.classList.add('show');
+        
+        // إعادة تعيين النموذج
+        setTimeout(() => {
+          contactForm.reset();
+          successMessage.classList.remove('show');
+        }, 5000);
+        
+        // لوج البيانات (يمكنك استبداله بإرسال حقيقي)
+        console.log('تم إرسال رسالة جديدة:', formData);
+      });
+    });
+  </script>
+</body>
+</html>
