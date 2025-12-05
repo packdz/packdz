@@ -833,7 +833,7 @@
         <ul>
           
           <li><a href="index.html">المتجر</a></li>
-          <li><a href="#">من نحن</a></li>
+          <li><a href="من نحن.html">من نحن</a></li>
         </ul>
       </nav>
       
@@ -877,7 +877,7 @@
       </h3>
       <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px;">
         <iframe 
-          src="https://www.youtube.com/embed/W9WOi9SxG7w" 
+          src="https://www.youtube.com/embed/3V1TJWlhAiM" 
           style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
           allowfullscreen>
@@ -957,7 +957,6 @@
     <div class="container">
       <div class="tabs-header">
         <div class="tab active" data-tab="description">الوصف</div>
-        <div class="tab" data-tab="specs">المواصفات</div>
         <div class="tab" data-tab="shipping">الشحن</div>
         <div class="tab" data-tab="reviews">التقييمات (24)</div>
       </div>
@@ -966,40 +965,34 @@
         <p>ارجع بالزمن مع هذا التي شيرت الرجعي &#39;أوقفت لعبتي لأكون هنا&#39;. الاختيار المثالي للاعبين الحنينيين الذين يحبون الألعاب الكلاسيكية.</p>
       </div>
       
-      <div class="tab-content" id="specs">
-        <table class="specs-table">
-          <tr>
-            <td>المادة</td>
-            <td>100% قطن ممتاز</td>
-          </tr>
-          
-          <tr>
-            <td>تعليمات العناية</td>
-            <td>غسيل آلي بارد، تجفيف بدرجة منخفضة</td>
-          </tr>
-          <tr>
-            <td>فتحة الرقبة</td>
-            <td>ياقة بدون درزات</td>
-          </tr>
-          <tr>
-            <td>نوع الأكمام</td>
-            <td>أكمام قصيرة</td>
-          </tr>
-          <tr>
-            <td>نوع الطباعة</td>
-            <td>طباعة مباشرة عالية الجودة على القماش</td>
-          </tr>
-        </table>
-      </div>
+     
       
       <div class="tab-content" id="shipping">
         <p><strong>الشحن داخل الجزائر:</strong> نقدم خدمة التوصيل لجميع الولايات الجزائرية عبر شركات التوصيل الموثوقة. يتم معالجة الطلبات خلال 24 ساعة.</p>
       </div>
       
       <div class="tab-content" id="reviews">
-        <p>سيتم عرض تقييمات العملاء هنا. (24 تقييم)</p>
-      </div>
+  <div class="reviews-list">
+      
+        <div class="review-card">
+          <div class="review-header">
+            <span class="reviewer-name">أمين</span>
+            <div class="stars">★★★★★</div>
+          </div>
+          <p class="review-comment">جودة ممتازة والقماش رائع</p>
+        </div>
+      
+        <div class="review-card">
+          <div class="review-header">
+            <span class="reviewer-name">سارة</span>
+            <div class="stars">★★★★☆</div>
+          </div>
+          <p class="review-comment">جميل لكن وصل متأخر قليلاً</p>
+        </div>
+      
+      <p class="reviews-summary">عدد التقييمات: 2 | متوسط التقييم: 4.5</p>
     </div>
+</div>
   </section>
 
   <!-- قسم المنتجات ذات الصلة -->
@@ -1037,19 +1030,19 @@
         <div class="footer-column">
           <h3>المتجر</h3>
           <ul class="footer-links">
-            <li><a href="#">جميع المنتجات</a></li>
-            <li><a href="#">وصل حديثاً</a></li>
-            <li><a href="#">الأكثر مبيعاً</a></li>
-            <li><a href="#">التخفيضات</a></li>
+            <li><a href="index.html">جميع المنتجات</a></li>
+            <li><a href="وصل حديثا.html">وصل حديثاً</a></li>
+            <li><a href="الأكثر مبيعا.html">الأكثر مبيعاً</a></li>
+            <li><a href="التخفيضات.html">التخفيضات</a></li>
           </ul>
         </div>
         
         <div class="footer-column">
           <h3>الدعم</h3>
           <ul class="footer-links">
-            <li><a href="#">اتصل بنا</a></li>
-            <li><a href="#">سياسة الشحن</a></li>
-            <li><a href="#">الأسئلة الشائعة</a></li>
+            <li><a href="اتصل بنا.html">اتصل بنا</a></li>
+            <li><a href="سياسة الشحن.html">سياسة الشحن</a></li>
+            <li><a href="صفحة الأسئلة الشائعة.html">الأسئلة الشائعة</a></li>
           </ul>
         </div>
         
@@ -1518,6 +1511,16 @@
     justify-content: center;
     gap: 10px;
   }
+
+ /* أنماط التقييمات */
+  .reviews-list { display: flex; flex-direction: column; gap: 15px; }
+  .review-card { background: var(--light-gray); border-radius: 8px; padding: 15px; }
+  .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .reviewer-name { font-weight: 600; }
+  .stars { color: #ffc107; font-size: 18px; }
+  .review-comment { margin: 0; color: var(--gray); line-height: 1.5; }
+  .reviews-summary { margin-top: 15px; text-align: center; font-weight: 500; color: var(--primary); }
+  .no-reviews { text-align: center; padding: 30px; color: var(--gray); }
 </style>
 
 <script>
