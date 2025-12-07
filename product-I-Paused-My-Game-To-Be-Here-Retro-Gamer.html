@@ -1542,7 +1542,7 @@ async function saveOrderToGoogleSheets(orderData) {
     // حفظ محلي كنسخة احتياطية
     const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
     pendingOrders.push(orderData);
-    localStorage.setItem('pendingOrders', JSON.stringify(savedOrders));
+    localStorage.setItem('pendingOrders', JSON.stringify(pendingOrders));
     return false;
   }
 }
@@ -1929,52 +1929,37 @@ async function saveOrderToGoogleSheets(orderData) {
       setInterval(updateProductStatus, 30000);
     });
     
-    // دالة لحفظ الطلب في Google Sheets
-    async function saveOrderToGoogleSheets(orderData) {
-      try {
-        // استبدل هذا الرابط برابط Web App الخاص بك من Google Apps Script
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwT3yNQnB5N1KqJq9Q1LmZpZwX5s6YQaVqZqQqQ/exec';
-        
-        const response = await fetch(WEB_APP_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(orderData)
-        });
-        
-        return true;
-      } catch (error) {
-        console.error('Error saving order:', error);
-        throw error;
-      }
-    }
+ // في دالة saveOrderToGoogleSheets في generate-pages.js
+async function saveOrderToGoogleSheets(orderData) {
+  try {
+    // استخدم رابط Cloudflare Worker
+    const WEB_APP_URL = 'https://billowing-rain-004d.mohammedsid43.workers.dev/';
+    // أو الرابط الذي تستخدمه في Cloudflare Worker
     
-    // محاولة إرسال الطلبات المعلقة
-    async function retryPendingOrders() {
-      const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
-      
-      if (pendingOrders.length > 0) {
-        console.log('Retrying', pendingOrders.length, 'pending orders...');
-        
-        for (let i = 0; i < pendingOrders.length; i++) {
-          try {
-            await saveOrderToGoogleSheets(pendingOrders[i]);
-            pendingOrders.splice(i, 1);
-            i--;
-          } catch (error) {
-            pendingOrders[i].retryCount++;
-            if (pendingOrders[i].retryCount > 3) {
-              pendingOrders.splice(i, 1);
-              i--;
-            }
-          }
-        }
-        
-        localStorage.setItem('pendingOrders', JSON.stringify(pendingOrders));
-      }
-    }
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData)
+    });
+    
+    const result = await response.json();
+    return result.success;
+    
+  } catch (error) {
+    console.error('Error saving order:', error);
+    // حفظ محلي كنسخة احتياطية
+    const pendingOrders = JSON.parse(localStorage.getItem('pendingOrders') || '[]');
+    pendingOrders.push({
+      ...orderData,
+      timestamp: new Date().toISOString(),
+      retryCount: 0
+    });
+    localStorage.setItem('pendingOrders', JSON.stringify(pendingOrders));
+    return false;
+  }
+}
     
     // إغلاق النماذج بالنقر خارجها
     window.addEventListener('click', function(event) {
